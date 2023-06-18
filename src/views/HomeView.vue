@@ -27,7 +27,12 @@
             />
           </div>
 
-          <Button class="mt-5" />
+          <Button class="mt-5">
+            <div class="flex items-center justify-center gap-4">
+              Kirish
+              <div v-if="isLoading" class="spinner"></div>
+            </div>
+          </Button>
         </form>
       </Card>
     </div>
@@ -48,10 +53,12 @@ const store = useMainStore()
 const login = ref('')
 const password = ref('')
 const router = useRouter()
+const isLoading = ref(false)
 const unauthorized = ref(false)
 
 const onSubmit = async () => {
   unauthorized.value = false
+  isLoading.value = true
 
   try {
     const { data } = await instance.post('/auth/login/', {
@@ -64,7 +71,8 @@ const onSubmit = async () => {
       refresh_token: data.refresh
     })
 
-    router.push('/sponsors')
+    router.push('/admin/sponsors')
+    isLoading.value = false
   } catch (err) {
     unauthorized.value = true
   }
@@ -74,3 +82,21 @@ const onSuccess = () => {}
 
 const onError = () => {}
 </script>
+
+<style scoped>
+.spinner {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side, #1f203b 94%, #0000) top/3.8px 3.8px no-repeat,
+    conic-gradient(#0000 30%, #0d0d1a);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 3.8px), #000 0);
+  animation: spinner-c7wet2 0.6s infinite linear;
+}
+
+@keyframes spinner-c7wet2 {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+</style>

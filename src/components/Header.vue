@@ -2,7 +2,7 @@
   <header class="h-16 bg-white !shadow-my-2sm middle px-5 relative">
     <nav class="grid grid-cols-max-1 items-center h-full w-full max-w-1200 gap-5">
       <div>
-        <img src="@/assets/logo/logo__pro.svg" alt="404" />
+        <img src="@/assets/logo.svg" alt="404" />
       </div>
       <div class="flex justify-end gap-10">
         <button class="bg-smoke flex p-1 rounded items-center">
@@ -46,13 +46,13 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { useMainStore } from '@/store/index'
+import { useMainStore } from '../store/index'
 
 const router = useRouter()
 const store = useMainStore()
 
 const logout = () => {
   store.logout()
-  router.push({ name: 'login' })
+  router.push({ name: 'home' })
 }
 </script>

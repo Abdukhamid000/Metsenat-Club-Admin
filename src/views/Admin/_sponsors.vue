@@ -73,7 +73,7 @@
         </tr>
       </template>
     </Table>
-    <Pagination v-if="!loading" :total="total" />
+    <Pagination v-if="!isLoading" :total="total" />
   </div>
 </template>
 
@@ -98,16 +98,22 @@ const formatDate = (isoDateTimeString: string) => {
 }
 
 const setColorAccordingToStatus = (statusText: string) => {
-  const statuses = {
-    Yangi: 'text-[#5babf2]',
-    Moderatsiyada: 'text-[#ffa445]'
+  // const statuses = {
+  //   Yangi: 'text-[#5babf2]',
+  //   Moderatsiyada: 'text-[#ffa445]'
+  // }
+  // if (statusText) {
+  //   return statuses[statusText]
+  // }
+  if (statusText === 'Yangi') {
+    return 'text-[#5babf2]'
+  } else {
+    return 'text-[#ffa445]'
   }
-
-  return statuses[statusText]
 }
 
 const route = useRoute()
-const rows = ref([])
+const rows = ref([] as any[])
 const isLoading = ref(false)
 const total = ref(0)
 

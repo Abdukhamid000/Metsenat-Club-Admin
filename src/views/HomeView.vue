@@ -72,9 +72,10 @@ const onSubmit = async () => {
     })
 
     router.push('/admin/sponsors')
-    isLoading.value = false
   } catch (err) {
     unauthorized.value = true
+  } finally {
+    isLoading.value = false
   }
 }
 

@@ -44,10 +44,7 @@
             </span>
           </td>
           <td>
-            <span
-              class="font-medium"
-              :class="`text-[${setColorAccordingToStatus(row.get_status_display)}]`"
-            >
+            <span class="font-medium" :class="setColorAccordingToStatus(row.get_status_display)">
               {{ row.get_status_display }}
             </span>
           </td>
@@ -76,6 +73,7 @@
         </tr>
       </template>
     </Table>
+    <Pagination v-if="!loading" :total="total" />
   </div>
 </template>
 
@@ -84,6 +82,7 @@ import { useRoute } from 'vue-router'
 import { watch, ref, computed, onMounted } from 'vue'
 import Table from '@/components/Table.vue'
 import instance from '@/plugins/axios'
+import Pagination from '@/components/Pagination.vue'
 
 const coverter = (value: number) => {
   return new Intl.NumberFormat('uz-SM').format(value).replace(/,/g, ' ')
@@ -100,8 +99,8 @@ const formatDate = (isoDateTimeString: string) => {
 
 const setColorAccordingToStatus = (statusText: string) => {
   const statuses = {
-    Yangi: '#5BABF2',
-    Moderatsiyada: '#FFA445'
+    Yangi: 'text-[#5babf2]',
+    Moderatsiyada: 'text-[#ffa445]'
   }
 
   return statuses[statusText]
@@ -130,6 +129,7 @@ async function fetchData() {
     const { data } = await instance.get(`/sponsor-list/?page=${page.value}&page_size=${size.value}`)
     rows.value = data.results
     total.value = data.count
+    console.log(data.count, 'total')
   } catch (error) {
     console.log(error)
   }

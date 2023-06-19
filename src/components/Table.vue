@@ -1,5 +1,7 @@
 <template>
-  <table class="w-full table font-rubik table-auto border-separate border-spacing-y-3">
+  <table
+    class="w-full max-w-[1200px] mx-auto table font-rubik table-auto border-separate border-spacing-y-3"
+  >
     <thead>
       <tr class="text-center text-silver text-xs uppercase tracking-widest font-medium">
         <slot name="thead"></slot>

@@ -1,6 +1,8 @@
 <template>
   <header class="h-16 bg-white !shadow-my-2sm middle px-5 relative">
-    <nav class="grid grid-cols-max-1 items-center h-full w-full max-w-1200 gap-5">
+    <nav
+      class="grid grid-cols-max-1 max-w-[1200px] mx-auto items-center h-full w-full max-w-1200 gap-5"
+    >
       <div>
         <img src="@/assets/logo.svg" alt="404" />
       </div>

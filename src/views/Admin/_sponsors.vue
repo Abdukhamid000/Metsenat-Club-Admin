@@ -4,7 +4,7 @@
   </div>
 
   <div v-else class="overflow-x-auto">
-    <Table>
+    <Table class="mt-10">
       <template #thead>
         <td data-orded>#</td>
         <td class="w-1/4 !text-left">F.I.Sh.</td>

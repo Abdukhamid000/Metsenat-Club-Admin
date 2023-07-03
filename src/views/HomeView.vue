@@ -13,13 +13,13 @@
           <label class="font-rubik font-medium text-sm uppercase tracking-wider" for="login"
             >LOGIN</label
           >
-          <Input class="mt-2 mb-5" id="login" v-model="login" />
+          <Input class="mt-2 mb-5" id="login" v-model="form.login" :error="v$.login.$error" />
           <label class="font-rubik font-medium text-sm uppercase" for="password">PAROL</label>
-          <Input class="mt-2" id="password" v-model="password" />
+          <Input class="mt-2" id="password" v-model="form.password" :error="v$.password.$error" />
 
           <div class="w-full mt-5">
             <VueRecaptcha
-              class="!scale-[calc(320_/_304)] !origin-[0_0]"
+              class="!scale-[calc(315_/_304)] !origin-[0_0]"
               sitekey="6LfjcaomAAAAAGpl5O8XghDalAilrcc9ElWP8pvK"
               :load-recaptcha-script="true"
               @verify="onSuccess"
@@ -29,8 +29,8 @@
 
           <Button class="mt-5">
             <div class="flex items-center justify-center gap-4">
-              Kirish
               <div v-if="isLoading" class="spinner"></div>
+              <span v-else> Kirish </span>
             </div>
           </Button>
         </form>
@@ -45,41 +45,69 @@ import Card from '@/components/Card.vue'
 import Button from '@/components/Button.vue'
 import { VueRecaptcha } from 'vue-recaptcha'
 import instance from '@/plugins/axios'
+import { required } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+
 import { useMainStore } from '@/store'
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 
 const store = useMainStore()
-const login = ref('')
-const password = ref('')
+
 const router = useRouter()
 const isLoading = ref(false)
 const unauthorized = ref(false)
+const isSucceed = ref(false)
 
-const onSubmit = async () => {
-  unauthorized.value = false
-  isLoading.value = true
+const form = reactive({
+  login: '',
+  password: ''
+})
 
-  try {
-    const { data } = await instance.post('/auth/login/', {
-      username: login.value,
-      password: password.value
-    })
+const login = ref('')
+const password = ref('')
 
-    store.setTokens({
-      access_token: data.access,
-      refresh_token: data.refresh
-    })
-
-    router.push('/admin/sponsors')
-  } catch (err) {
-    unauthorized.value = true
-  } finally {
-    isLoading.value = false
+const rules = {
+  login: {
+    required
+  },
+  password: {
+    required
   }
 }
 
-const onSuccess = () => {}
+const v$ = useVuelidate(rules, form)
+
+const onSubmit = async () => {
+  v$.value.$touch()
+
+  if (isSucceed.value && !v$.value.$error) {
+    unauthorized.value = false
+    isLoading.value = true
+
+    try {
+      const { data } = await instance.post('/auth/login/', {
+        username: form.login,
+        password: form.password
+      })
+
+      store.setTokens({
+        access_token: data.access,
+        refresh_token: data.refresh
+      })
+
+      router.push('/admin/sponsors')
+    } catch (err) {
+      unauthorized.value = true
+    } finally {
+      isLoading.value = false
+    }
+  }
+}
+
+const onSuccess = () => {
+  isSucceed.value = true
+}
 
 const onError = () => {}
 </script>

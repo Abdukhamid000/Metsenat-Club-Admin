@@ -3,6 +3,7 @@
     :value="modelValue"
     @input="handleInput"
     class="border border-dark-gray py-3 px-3.5 userInput max-w-[315px] w-full transition duration-300 hover:border-silver rounded-md outline-none text-15p leading-[18px]"
+    :class="{ 'border-red-500': error }"
     type="text"
   />
 </template>
@@ -10,6 +11,7 @@
 <script setup lang="ts">
 interface Props {
   modelValue: number | string
+  error?: boolean
 }
 
 const emit = defineEmits<{
